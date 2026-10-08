@@ -1,0 +1,4 @@
+interface:
+  display_name: "Mulgil Kim 风格改画"
+  short_description: "将上传图片改为金水路风格，支持梦幻、笔触、配色与画幅选择"
+  default_prompt: "使用 $mulgil-kim-painter 将上传图片改为金水路风格，绘画前先确定梦幻程度和笔触偏好。"
