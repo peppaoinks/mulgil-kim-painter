@@ -6,7 +6,7 @@
 
 ## 安装
 
-让 Codex 安装本仓库中的 `mulgil-kim-painter` 目录，或将该目录完整复制到 `~/.codex/skills/`。保留目录内的 `SKILL.md`、`agents/`、`references/` 和存在时的 `assets/`。
+让 Codex 安装本仓库中的 `mulgil-kim-painter` 目录，或将该目录完整复制到 `~/.codex/skills/`。保留目录内的 `SKILL.md`、`agents/` 和 `references/`。
 
 如果新会话没有识别到该技能，可以要求 Codex 读取 `mulgil-kim-painter/SKILL.md` 后执行。依赖内置 `image_gen`，无需单独配置 API 密钥。
 
@@ -48,24 +48,6 @@
 
 这些参数控制生成提示，并非图片工具的独立数值接口。具体效果仍需查看生成结果。
 
-## 首版测试示例
-
-测试原图为自主生成的照片。以下图片产生于七项参数加入之前，展示首版的主体保留与绘画化效果，不能作为新增参数全部有效的证据。
-
-| 自主生成的测试原图 | 首版改画修正版 |
-| --- | --- |
-| ![自主生成的湖边人物照片](测试/测试原图.png) | ![首版改画修正版](测试/改画修正版.png) |
-
-首版保住了主体、服装和主要构图，但指定画家的鲜明超现实感仍偏弱。首版记录见 [测试记录](测试记录.md) 和 [实际提示词](测试/实际提示词.md)。
-
-## 2026-10-09 参数对照
-
-新增实际作品参考后，用同一原图生成四种组合，并对强烈梦幻＋松散结果做一次山坡修正。笔触差异可见，首次的强烈形态变化仍有限；一次具体结构修正后，卷边和翻折明确出现。完整图示与限制见 [对照测试](测试/2026-10-09/结果.md)。
-
-![强烈梦幻与松散笔触的定向修正结果](mulgil-kim-painter/assets/examples/c-high-loose-refined.png)
-
-其余场景与参数仍待验证。本次没有单独隔离参考图的影响，也不保证首次生成就能稳定达到目标。
-
 ## 仓库内容
 
 | 路径 | 用途 |
@@ -74,7 +56,5 @@
 | [mulgil-kim-painter/agents/openai.yaml](mulgil-kim-painter/agents/openai.yaml) | 技能名称和界面调用提示 |
 | [mulgil-kim-painter/references/style-guide.md](mulgil-kim-painter/references/style-guide.md) | 参考图选择、场景变化与笔触检查 |
 | [使用说明.md](使用说明.md) | 参数说明与使用示例 |
-| [测试记录.md](测试记录.md) | 实际验证、修改与限制 |
-| [测试/](测试/) | 输入图片、两版输出与完整提示词 |
 
 风格资料来源见 [Skill 的风格依据](mulgil-kim-painter/SKILL.md#风格依据)。
