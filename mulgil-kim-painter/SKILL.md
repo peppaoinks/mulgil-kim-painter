@@ -14,7 +14,7 @@ description: 把照片或图片改画为 Mulgil Kim（金水路、김물길、Ki
 > 这次想要一点梦幻感，还是大胆一些？笔触想松一点、适中，还是细腻？
 > 配色、光线或构图有想法也可以一起说，其他就照原图来。
 
-有用户输入工具时用它提问，也接受自由描述。等梦幻程度和笔触偏好都有回复后再生成；预选项和没回复都不算选择。等待时可以先看原图。说过的偏好不再问，也不用让用户填完七项。
+有用户输入工具时用它提问，也接受自由描述。等梦幻程度和笔触偏好都有回复后再生成；预选项和没回复都不算选择。等待时可以先看原图。说过的偏好不再问，其他选项按需补充，不用逐项填写。
 
 | 参数 | 可选值 | 对画面的作用 | 未指定时 |
 | --- | --- | --- | --- |
@@ -25,10 +25,17 @@ description: 把照片或图片改画为 Mulgil Kim（金水路、김물길、Ki
 | 光线与情绪 | 原图光线 / 清新日光 / 温柔黄昏 / 静谧月夜 / 自定义 | 决定照明、时段及氛围 | 沿用原图光线与时段 |
 | 材质感 | 平整哑光 / 轻微纸纹 / 明显颜料纹理 | 决定表面质感，与笔触精细度分别控制 | 平整哑光水粉质感 |
 | 画幅 | 原比例 / 方形 / 竖版 / 横版 / 指定比例 | 决定裁切或延展及最终构图 | 原比例 |
+| 植物覆盖多少 | 少量点缀 / 均衡 / 占主导 | 决定草地、树叶等植物形态在画面中占多少，不只是把颜色变绿 | 沿用原图，不主动增加植物 |
+| 梦幻变化放在哪里 | 天空 / 建筑 / 地面 / 多处 / 自定义区域 | 决定哪些地方发生形态变化，幅度仍由梦幻程度与原图保留程度决定 | 在允许改动的背景中处理，保留主体 |
+| 画面疏密 | 疏朗 / 适中 / 丰富 | 调整大色块、物体数量和空隙，与笔触细腻程度分开控制 | 沿用原图的疏密关系 |
 
 把选择写成具体的绘画要求。这些选项描述的是创作方向，图片工具没有对应的精确数值开关；不要编造 dreaminess、brushwork 等字段。
 
 自由描述优先于菜单。接受“强烈梦幻但细腻”“构图忠于原图、笔触松散”等组合，不把梦幻与细腻设为二选一。仅说“更梦幻”时已确定梦幻方向，但不能据此推断笔触；反之同样处理。原图保留程度限定变形范围：强烈梦幻且忠于原图时，在允许范围内增强色彩、光线、材质和既有自然形态的梦境感，不擅自移动主体。
+
+新增三项都是可选项，不追加必答问题。“加一点绿”先按配色理解；“让屋顶长草”才是在增加植物。用户明确选择植物覆盖时，可以在允许修改的位置增加或减少植物，不遮住要保留的主体，也不把城市随意换成森林。指定只改天空，就把梦幻形态变化放在天空，建筑和地面的形态保留；整张图仍要画成统一的水粉质感。
+
+细腻也可以疏朗，比如用细密笔触画少数几条草甸，周围留出大片平整天空。丰富则增加允许区域里的层次和形态，不靠把笔触画碎来凑。只改植物覆盖时尽量保留其他区域的疏密；只改疏密时保留已选的植物覆盖。若两项都调整，交付时说清楚，不把结果当成某一项单独起作用的证据。
 
 如果选择彼此冲突，例如同时要求原构图完整保留和裁切成会丢失主体的画幅，只问如何取舍，不默默覆盖某项选择。改画幅时优先保住主体，背景延展仅限已有场景；必要时说明裁切或延展方式。
 
@@ -43,6 +50,8 @@ description: 把照片或图片改画为 Mulgil Kim（金水路、김물길、Ki
 | 自然细腻 | 轻微 | 细腻 | 忠于原图 | 原图配色 | 原图光线 | 平整哑光 | 原比例 |
 | 梦幻松散 | 强烈 | 松散 | 适度重构 | 绿蓝自然色 | 原图光线 | 平整哑光 | 原比例 |
 | 梦幻细腻 | 强烈 | 细腻 | 适度重构 | 绿蓝自然色 | 原图光线 | 平整哑光 | 原比例 |
+
+三个预设中的植物覆盖、变化位置和画面疏密都沿用上表的默认处理；用户可以另外指定，不自动设成植物占主导或满画面变化。
 
 用户拿不准时，讲清画面会有什么不同，或用他们上传的参考图解释。不用再追加一轮选项。
 
@@ -88,14 +97,17 @@ Use case: style-transfer
 Input images: Image 1 is the edit target. [On first conversion: original image. On a local revision: latest accepted painting. Identify any original identity/scene reference and separate artwork style references by index.]
 Primary request: Repaint the image as a painting in the style of Mulgil Kim (Kim Mulgil, 김물길), adapting the serene, nature-led visual language to the following choices.
 Dreamlike intensity: [user's choice and concrete visual treatment].
-Concrete transformation: [existing element to change, its new visible form, and the allowed extent; do not rely only on blur or glow].
+Concrete transformation: [element to change or explicitly authorized vegetation to add, its new visible form, and the allowed extent; do not rely only on blur or glow].
+Transformation area: [chosen sky, architecture, ground or custom area; preserve forms outside it. If unspecified, work within allowed background areas].
 Brushwork/detail: [user's choice, controlled independently of dreamlike intensity].
 Reconstruction: [fidelity level; allowed changes].
 Must preserve: [subject identity cues, key objects and relationships required by user or fidelity level].
 Style/medium: Matte gouache / acrylic-gouache painting with [chosen surface texture]. Repaint the whole image rather than adding a texture filter.
 Palette: [chosen palette; original colors if unspecified].
+Plant coverage: [chosen sparse accents, balanced presence or dominant vegetation; specify location and amount of plant forms. Preserve original vegetation when unspecified; a green palette alone does not authorize added plants].
 Lighting/mood: [chosen lighting, time and emotion; original lighting if unspecified].
 Composition/aspect ratio: [chosen framing and ratio; original ratio if unspecified; crop or extension treatment if applicable].
+Visual density: [chosen spacious, moderate or rich arrangement of forms and open areas; independent of fine or loose brushwork. Preserve original density when unspecified].
 Style references: [observed transferable color/shape/texture relationships from actual reference images; omit when none are supplied]. Do not copy their figures, objects, scene layout or signature. User-selected brushwork takes priority over the reference's detail level.
 Avoid: photorealistic finish, glossy 3D rendering, unintended heavy impasto, thick cartoon outlines, unintended text, watermark, artist signature, extra subjects, changes outside the allowed reconstruction scope; [exclusions appropriate to chosen brushwork].
 ~~~
@@ -110,9 +122,11 @@ Avoid: photorealistic finish, glossy 3D rendering, unintended heavy impasto, thi
 
 ## 检查与交付
 
-查看输出，与原图比较主体、关键物件、构图、绘画质感，并检查是否符合本次参数：梦幻程度、笔触、保留范围、配色、光线、材质与画幅。不用随意的相似度百分比宣称客观效果。明显丢失主体、变更关键物件、仍像照片或偏离选定方向时，可针对具体问题修正一次；重复失败时说明实际限制，不无限重试。重试时重申保留清单和已选参数，不重复问同一个问题。
+查看输出，与原图比较主体、关键物件、构图、绘画质感，并检查是否符合本次参数：梦幻程度、笔触、保留范围、配色、光线、材质、画幅、植物覆盖、变化位置和画面疏密。不用随意的相似度百分比宣称客观效果。明显丢失主体、变更关键物件、仍像照片或偏离选定方向时，可针对具体问题修正一次；重复失败时说明实际限制，不无限重试。重试时重申保留清单和已选参数，不重复问同一个问题。
 
 重点分别看：梦幻变化是否实际出现、松散与细腻是否表现在笔触与细节上、参考图的风格关系是否呈现而没有搬入其中对象。局部修改还要与满意图比较未要求改变的区域。
+
+植物覆盖要看植物形态的面积，不能用绿色滤镜代替；变化位置要核对有没有改到区域以外；画面疏密要看大色块和空隙，不用模糊细节假装留白。这些都是方向性控制，不承诺精确面积比例。
 
 
 直接展示图片并简短说明实际参数；需要选择或比较时，可并列展示原图与结果，不擅自额外生成版本。需项目保存时，把工具返回的实际文件复制到项目，使用新文件名、保留原图；不假设内置工具支持指定输出路径。提供结果链接，记录实际参数、提示词与使用内置工具的事实，不把未实测的参数效果写成已经验证。描述为 AI 改画，不作为艺术家本人作品。
