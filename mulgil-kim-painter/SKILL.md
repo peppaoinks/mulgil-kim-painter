@@ -34,16 +34,30 @@ description: 将用户上传的照片或图片改画为 Mulgil Kim（金水路�
 
 用户明确说“你决定”或要求自主测试时，可自行选择并简短说明所采用参数，无需反复追问；测试选择不能当作用户永久偏好。批量可共用一次选择，除非用户逐图指定。迭代沿用当前参数，用户调整某项时只更新该项。
 
+### 快捷预设
+
+用户可以直接选择完整组合，或自由调整其中任意参数；不自动替用户选预设。已明确单项偏好时，保留其选择，不用预设覆盖。
+
+| 预设 | 梦幻 | 笔触 | 原图保留 | 配色 | 光线 | 材质 | 画幅 |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| 自然细腻 | 轻微 | 细腻 | 忠于原图 | 原图配色 | 原图光线 | 平整哑光 | 原比例 |
+| 梦幻松散 | 强烈 | 松散 | 适度重构 | 绿蓝自然色 | 原图光线 | 平整哑光 | 原比例 |
+| 梦幻细腻 | 强烈 | 细腻 | 适度重构 | 绿蓝自然色 | 原图光线 | 平整哑光 | 原比例 |
+
+用户难以理解参数或希望看例图时，展示 [实测图示](references/style-guide.md#参数选择的实测图示) 中少量相关图片，并说明场景和固定参数。图示是 AI 改画，不是艺术家原作，也不是三个快捷预设的完整验证。不把测试批次变成每次改画的必需步骤。
+
 ## 输入与工具
 
 - 已有明确目标图片时，在偏好已确定后处理。没有目标图时请用户上传；不要用自制图冒充用户照片。用户明确要求自主测试时，可自制测试图并说明来源；测试方向需明确记录。
 - 多图时区分“待改画原图”和“风格参考”。目标不明确且影响结果时，只问哪张需要改画。明确要求批量时逐张处理。
 - 使用内置 image_gen / image_gen.imagegen（编排工具中可能名为 image_gen__imagegen），不以滤镜、SVG 或文字提示词代替实际改画。工具不可用时如实报告，不宣称已经生成，不擅自切换收费 API。
 - 本地图先用 view_image 查看，再用 referenced_image_paths 传入完整路径；只有会话图片没有本地路径时，使用能覆盖所有目标图的最小 num_last_images_to_include，最多五张。两种输入方式不要混用。无法覆盖所有目标时请用户重新附图。
-- 迭代时仍提供原图，必要时附上一版结果并明确两者角色，避免误把结果当作原图。
+- 首次改画以原图为编辑目标。用户满意后只调整局部或某项参数时，以最新满意结果为编辑目标；原图可作为身份、物件与场景的辅助核对输入，明确两者角色。用户要求从头重画时才重新以原图为目标。
 - 透明输入默认保留透明背景；普通照片使用不透明背景，正确设置 transparent_background。
 
 ## 风格与保留内容
+
+选择风格参考、设计具体梦幻变化或检查风格偏差时读取 [references/style-guide.md](references/style-guide.md)。优先使用用户提供的作品；未提供时可查阅可访问的艺术家或画廊作品图，实际查看后再用作风格输入。无法获取时用文字指导，不假装用过参考图。
 
 以下是本 skill 的提示设计，结合艺术家官网和合作画廊资料整理，不是对所有作品的固定定义：
 
@@ -54,6 +68,8 @@ description: 将用户上传的照片或图片改画为 Mulgil Kim（金水路�
 - **适配原图**：人像保留可辨认特征、姿态和服装；宠物保留花色、形态；城市、室内的改动遵循原图保留程度。原图没有森林，不擅自改成森林。
 
 观察原图并写出简短保留清单：主体数量与种类、姿态、位置、关键服装或物件、主要场景关系、画幅。观察不能替代用户意图。人像允许绘画化，不能承诺绝对身份或像素级保真。
+
+据原图与参数确定一个具体的形态变化，生成前简短说明，不额外要求确认。明显或强烈梦幻要落到既有元素的可见变化；仅加柔光、模糊或雾气不能作为达到梦幻程度的证据。改变笔触时也要落实到草叶、树冠、地面等实际区域，避免各参数只停留在标签。
 
 ## 提示模板
 
@@ -69,9 +85,10 @@ description: 将用户上传的照片或图片改画为 Mulgil Kim（金水路�
 
 ~~~text
 Use case: style-transfer
-Input images: Image 1 is the original image to repaint. [Identify other images and their roles.]
+Input images: Image 1 is the edit target. [On first conversion: original image. On a local revision: latest accepted painting. Identify any original identity/scene reference and separate artwork style references by index.]
 Primary request: Repaint the image as a painting in the style of Mulgil Kim (Kim Mulgil, 김물길), adapting the serene, nature-led visual language to the following choices.
 Dreamlike intensity: [user's choice and concrete visual treatment].
+Concrete transformation: [existing element to change, its new visible form, and the allowed extent; do not rely only on blur or glow].
 Brushwork/detail: [user's choice, controlled independently of dreamlike intensity].
 Reconstruction: [fidelity level; allowed changes].
 Must preserve: [subject identity cues, key objects and relationships required by user or fidelity level].
@@ -79,16 +96,27 @@ Style/medium: Matte gouache / acrylic-gouache painting with [chosen surface text
 Palette: [chosen palette; original colors if unspecified].
 Lighting/mood: [chosen lighting, time and emotion; original lighting if unspecified].
 Composition/aspect ratio: [chosen framing and ratio; original ratio if unspecified; crop or extension treatment if applicable].
+Style references: [observed transferable color/shape/texture relationships from actual reference images; omit when none are supplied]. Do not copy their figures, objects, scene layout or signature. User-selected brushwork takes priority over the reference's detail level.
 Avoid: photorealistic finish, glossy 3D rendering, unintended heavy impasto, thick cartoon outlines, unintended text, watermark, artist signature, extra subjects, changes outside the allowed reconstruction scope; [exclusions appropriate to chosen brushwork].
 ~~~
 
 用户提供具体画作作为风格参考时，该图只指导颜色、笔触和氛围，主体与场景来自待改画原图。原图有用户要求保留的文字时，在提示中单独列出。
 
+## 用户满意后的局部修改
+
+“这张很好，只把笔触放松”属于修改当前结果，不是重新生成另一幅场景。沿用已选参数，仅更新被点名的部分；提示应列清“改变什么”和“其余保持什么”，例如松散化植物与地面笔触，保留人物、现有梦幻形态、色彩、光线与画幅。使用最新满意图作为编辑目标，必要时用原图辅助核对；两图在提示中明确角色。
+
+保存为新版本，不覆盖满意图。不承诺像素级不变，查看是否发生额外变化；若其他区域明显漂移，针对漂移修正一次。不要把重试后的不满意图自动设为新的满意基准。
+
 ## 检查与交付
 
 查看输出，与原图比较主体、关键物件、构图、绘画质感，并检查是否符合本次参数：梦幻程度、笔触、保留范围、配色、光线、材质与画幅。不用随意的相似度百分比宣称客观效果。明显丢失主体、变更关键物件、仍像照片或偏离选定方向时，可针对具体问题修正一次；重复失败时说明实际限制，不无限重试。重试时重申保留清单和已选参数，不重复问同一个问题。
 
-直接展示图片并简短说明。需项目保存时，把工具返回的实际文件复制到项目，使用新文件名、保留原图；不假设内置工具支持指定输出路径。提供结果链接，记录实际参数、提示词与使用内置工具的事实，不把未实测的参数效果写成已经验证。描述为 AI 改画，不作为艺术家本人作品。
+重点分别看：梦幻变化是否实际出现、松散与细腻是否表现在笔触与细节上、参考图的风格关系是否呈现而没有搬入其中对象。局部修改还要与满意图比较未要求改变的区域。
+
+制作或改进本 skill 时，可在同一原图上测试“轻微＋松散、轻微＋细腻、强烈＋松散、强烈＋细腻”；固定配色、光线、材质、画幅、保留程度和参考图。逐张生成、保存实际提示词并定性比较，不宣称单张样本证明所有场景稳定有效；图片工具没有种子控制时注明生成随机性。当前使用者只请求一张改画时，不自动运行四图测试。
+
+直接展示图片并简短说明实际参数；需要选择或比较时，可并列展示原图与结果，不擅自额外生成版本。需项目保存时，把工具返回的实际文件复制到项目，使用新文件名、保留原图；不假设内置工具支持指定输出路径。提供结果链接，记录实际参数、提示词与使用内置工具的事实，不把未实测的参数效果写成已经验证。描述为 AI 改画，不作为艺术家本人作品。
 
 ## 风格依据
 
